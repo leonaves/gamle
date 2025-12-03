@@ -1,8 +1,8 @@
 // Core game composition types
-export type Mechanic = 'guess' | 'match' | 'remember' | 'react' | 'arrange' | 'deduce' | 'trace' | 'hunt' | 'stack';
+export type Mechanic = 'guess' | 'match' | 'remember' | 'react' | 'arrange' | 'deduce' | 'trace' | 'hunt' | 'stack' | 'dodge' | 'chase' | 'bounce';
 export type Element = 'words' | 'colors' | 'shapes' | 'numbers' | 'patterns' | 'emoji' | 'directions' | 'math';
-export type Constraint = 'attempts' | 'time' | 'sequence' | 'grid' | 'streak' | 'precision';
-export type Modifier = 'hidden' | 'inverted' | 'chained' | 'speed' | 'mirrored' | 'blind' | 'zen' | 'chaos';
+export type Constraint = 'attempts' | 'time' | 'sequence' | 'grid' | 'streak' | 'precision' | 'survival' | 'laps';
+export type Modifier = 'hidden' | 'inverted' | 'chained' | 'speed' | 'mirrored' | 'blind' | 'zen' | 'chaos' | 'turbo' | 'gravity';
 
 export interface GameConfig {
   mechanic: Mechanic;
@@ -66,6 +66,9 @@ export const MECHANIC_NAMES: Record<Mechanic, string> = {
   trace: 'Trace',
   hunt: 'Hunt',
   stack: 'Stack',
+  dodge: 'Dodge',
+  chase: 'Chase',
+  bounce: 'Bounce',
 };
 
 export const ELEMENT_NAMES: Record<Element, string> = {
@@ -86,6 +89,8 @@ export const CONSTRAINT_NAMES: Record<Constraint, string> = {
   grid: 'Grid Based',
   streak: 'Keep Streak',
   precision: 'Precision',
+  survival: 'Survival',
+  laps: 'Laps',
 };
 
 export const MODIFIER_NAMES: Record<Modifier, string> = {
@@ -97,4 +102,6 @@ export const MODIFIER_NAMES: Record<Modifier, string> = {
   blind: 'Blind',
   zen: 'Zen',
   chaos: 'Chaos',
+  turbo: 'Turbo',
+  gravity: 'Gravity',
 };

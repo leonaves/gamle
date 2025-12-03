@@ -7,3 +7,6 @@ export { DeduceGame } from './DeduceGame';
 export { TraceGame } from './TraceGame';
 export { HuntGame } from './HuntGame';
 export { StackGame } from './StackGame';
+export { DodgeGame } from './DodgeGame';
+export { ChaseGame } from './ChaseGame';
+export { BounceGame } from './BounceGame';

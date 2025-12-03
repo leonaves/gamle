@@ -13,6 +13,9 @@ import {
   TraceGame,
   HuntGame,
   StackGame,
+  DodgeGame,
+  ChaseGame,
+  BounceGame,
 } from '../games';
 
 interface Props {
@@ -87,6 +90,9 @@ export function GameContainer({ config, state, onStateChange, onComplete }: Prop
         {config.mechanic === 'trace' && <TraceGame {...gameProps} />}
         {config.mechanic === 'hunt' && <HuntGame {...gameProps} />}
         {config.mechanic === 'stack' && <StackGame {...gameProps} />}
+        {config.mechanic === 'dodge' && <DodgeGame {...gameProps} />}
+        {config.mechanic === 'chase' && <ChaseGame {...gameProps} />}
+        {config.mechanic === 'bounce' && <BounceGame {...gameProps} />}
       </div>
     </div>
   );
