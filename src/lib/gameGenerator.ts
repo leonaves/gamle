@@ -1,26 +1,32 @@
 import type { GameConfig, GameState, Mechanic, Element, Constraint, Modifier } from './types';
 import { createSeededRandom, pickRandom } from './random';
 
-const MECHANICS: Mechanic[] = ['guess', 'match', 'remember', 'react', 'arrange', 'deduce'];
-const MODIFIERS: Modifier[] = ['hidden', 'inverted', 'chained', 'speed'];
+const MECHANICS: Mechanic[] = ['guess', 'match', 'remember', 'react', 'arrange', 'deduce', 'trace', 'hunt', 'stack'];
+const MODIFIERS: Modifier[] = ['hidden', 'inverted', 'chained', 'speed', 'mirrored', 'blind', 'zen', 'chaos'];
 
 // Compatibility matrix - some combinations work better than others
 const COMPATIBLE_COMBOS: Record<Mechanic, Element[]> = {
-  guess: ['words', 'colors', 'numbers', 'patterns'],
-  match: ['colors', 'shapes', 'patterns', 'numbers'],
-  remember: ['colors', 'shapes', 'patterns', 'numbers'],
-  react: ['colors', 'shapes', 'numbers'],
-  arrange: ['numbers', 'colors', 'shapes', 'patterns'],
-  deduce: ['numbers', 'colors', 'patterns', 'words'],
+  guess: ['words', 'colors', 'numbers', 'patterns', 'emoji', 'math'],
+  match: ['colors', 'shapes', 'patterns', 'numbers', 'emoji'],
+  remember: ['colors', 'shapes', 'patterns', 'numbers', 'emoji', 'directions'],
+  react: ['colors', 'shapes', 'numbers', 'emoji', 'directions'],
+  arrange: ['numbers', 'colors', 'shapes', 'patterns', 'emoji', 'math'],
+  deduce: ['numbers', 'colors', 'patterns', 'words', 'math'],
+  trace: ['directions', 'shapes', 'patterns', 'colors'],
+  hunt: ['emoji', 'shapes', 'colors', 'numbers'],
+  stack: ['colors', 'shapes', 'numbers', 'emoji', 'math'],
 };
 
 const COMPATIBLE_CONSTRAINTS: Record<Mechanic, Constraint[]> = {
   guess: ['attempts', 'time'],
   match: ['attempts', 'time', 'grid'],
-  remember: ['attempts', 'sequence', 'time'],
-  react: ['time', 'sequence'],
+  remember: ['attempts', 'sequence', 'time', 'streak'],
+  react: ['time', 'sequence', 'streak', 'precision'],
   arrange: ['attempts', 'grid', 'time'],
   deduce: ['attempts', 'time', 'grid'],
+  trace: ['attempts', 'time', 'precision'],
+  hunt: ['time', 'attempts', 'streak'],
+  stack: ['time', 'attempts', 'streak', 'precision'],
 };
 
 export function generateGameConfig(seed: number): GameConfig {
@@ -74,13 +80,16 @@ export function createInitialGameState(config: GameConfig): GameState {
 }
 
 function getBaseAttempts(config: GameConfig): number {
-  const base = {
+  const base: Record<Mechanic, number> = {
     guess: 6,
     match: 20,
     remember: 3,
     react: 5,
     arrange: 15,
     deduce: 8,
+    trace: 3,
+    hunt: 10,
+    stack: 10,
   };
 
   let attempts = base[config.mechanic];
@@ -92,20 +101,26 @@ function getBaseAttempts(config: GameConfig): number {
   if (config.modifier === 'chained') {
     attempts += 2;
   }
+  if (config.modifier === 'zen') {
+    attempts += 5; // More forgiving
+  }
 
   return attempts;
 }
 
 function getTimeLimit(config: GameConfig): number | undefined {
-  if (config.constraint !== 'time') return undefined;
+  if (config.constraint !== 'time' && config.constraint !== 'streak') return undefined;
 
-  const base = {
+  const base: Record<Mechanic, number> = {
     guess: 120,
     match: 60,
     remember: 45,
     react: 30,
     arrange: 90,
     deduce: 120,
+    trace: 60,
+    hunt: 45,
+    stack: 60,
   };
 
   let time = base[config.mechanic];
@@ -114,19 +129,25 @@ function getTimeLimit(config: GameConfig): number | undefined {
   if (config.modifier === 'speed') {
     time = Math.floor(time / 2);
   }
+  // Zen modifier doubles time
+  if (config.modifier === 'zen') {
+    time = time * 2;
+  }
 
   return time;
 }
 
 function getMaxScore(config: GameConfig): number {
-  // Base score depends on mechanic
-  const base = {
+  const base: Record<Mechanic, number> = {
     guess: 6,
     match: 100,
     remember: 100,
     react: 100,
     arrange: 100,
     deduce: 100,
+    trace: 100,
+    hunt: 100,
+    stack: 100,
   };
 
   return base[config.mechanic] * config.difficulty;
@@ -140,6 +161,9 @@ export function getGameDescription(config: GameConfig): string {
       numbers: 'Guess the secret number',
       shapes: 'Guess the shape',
       patterns: 'Guess the pattern rule',
+      emoji: 'Guess the emoji',
+      directions: 'Guess the direction sequence',
+      math: 'Guess the answer',
     },
     match: {
       colors: 'Match the color pairs',
@@ -147,6 +171,9 @@ export function getGameDescription(config: GameConfig): string {
       patterns: 'Match the patterns',
       numbers: 'Match the number pairs',
       words: 'Match the words',
+      emoji: 'Match the emoji pairs',
+      directions: 'Match the directions',
+      math: 'Match equations to answers',
     },
     remember: {
       colors: 'Remember the color sequence',
@@ -154,6 +181,9 @@ export function getGameDescription(config: GameConfig): string {
       patterns: 'Remember the pattern',
       numbers: 'Remember the numbers',
       words: 'Remember the words',
+      emoji: 'Remember the emoji sequence',
+      directions: 'Remember the directions',
+      math: 'Remember the equations',
     },
     react: {
       colors: 'Tap the right colors quickly',
@@ -161,6 +191,9 @@ export function getGameDescription(config: GameConfig): string {
       numbers: 'Hit the target numbers',
       patterns: 'React to the pattern',
       words: 'React to the words',
+      emoji: 'Tap the correct emoji',
+      directions: 'Press the right direction',
+      math: 'Solve quickly',
     },
     arrange: {
       numbers: 'Arrange numbers in order',
@@ -168,6 +201,9 @@ export function getGameDescription(config: GameConfig): string {
       shapes: 'Arrange the shapes',
       patterns: 'Complete the pattern',
       words: 'Arrange the words',
+      emoji: 'Sort the emoji',
+      directions: 'Order the directions',
+      math: 'Order by value',
     },
     deduce: {
       numbers: 'Deduce the number from clues',
@@ -175,6 +211,39 @@ export function getGameDescription(config: GameConfig): string {
       patterns: 'Find the pattern rule',
       words: 'Deduce the word from hints',
       shapes: 'Deduce the shapes',
+      emoji: 'Deduce the emoji',
+      directions: 'Deduce the path',
+      math: 'Deduce the operation',
+    },
+    trace: {
+      directions: 'Follow the arrow path',
+      shapes: 'Trace the shape pattern',
+      patterns: 'Trace the sequence',
+      colors: 'Follow the color trail',
+      words: 'Trace the word path',
+      emoji: 'Follow the emoji trail',
+      numbers: 'Trace the number path',
+      math: 'Follow the equation',
+    },
+    hunt: {
+      emoji: 'Find the hidden emoji',
+      shapes: 'Hunt the shapes',
+      colors: 'Find the colors',
+      numbers: 'Hunt the numbers',
+      words: 'Find the words',
+      patterns: 'Hunt the patterns',
+      directions: 'Find the arrows',
+      math: 'Hunt the answers',
+    },
+    stack: {
+      colors: 'Stack matching colors',
+      shapes: 'Stack the shapes',
+      numbers: 'Stack to target sum',
+      emoji: 'Stack matching emoji',
+      math: 'Stack to solve equations',
+      words: 'Stack the words',
+      patterns: 'Stack the patterns',
+      directions: 'Stack the directions',
     },
   };
 
@@ -186,6 +255,10 @@ export function getGameDescription(config: GameConfig): string {
       inverted: ' (controls inverted)',
       chained: ' (chain combos)',
       speed: ' (speed mode)',
+      mirrored: ' (mirrored)',
+      blind: ' (blind mode)',
+      zen: ' (relaxed)',
+      chaos: ' (chaos mode)',
     };
     desc += modifierDesc[config.modifier];
   }
@@ -201,6 +274,9 @@ export function getGameEmoji(config: GameConfig): string {
     react: '⚡',
     arrange: '📊',
     deduce: '🔍',
+    trace: '✏️',
+    hunt: '🔎',
+    stack: '📚',
   };
 
   const element: Record<Element, string> = {
@@ -209,6 +285,9 @@ export function getGameEmoji(config: GameConfig): string {
     shapes: '⬡',
     numbers: '🔢',
     patterns: '✨',
+    emoji: '😀',
+    directions: '🧭',
+    math: '➕',
   };
 
   return `${mechanic[config.mechanic]}${element[config.element]}`;

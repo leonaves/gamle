@@ -1,8 +1,8 @@
 // Core game composition types
-export type Mechanic = 'guess' | 'match' | 'remember' | 'react' | 'arrange' | 'deduce';
-export type Element = 'words' | 'colors' | 'shapes' | 'numbers' | 'patterns';
-export type Constraint = 'attempts' | 'time' | 'sequence' | 'grid';
-export type Modifier = 'hidden' | 'inverted' | 'chained' | 'speed';
+export type Mechanic = 'guess' | 'match' | 'remember' | 'react' | 'arrange' | 'deduce' | 'trace' | 'hunt' | 'stack';
+export type Element = 'words' | 'colors' | 'shapes' | 'numbers' | 'patterns' | 'emoji' | 'directions' | 'math';
+export type Constraint = 'attempts' | 'time' | 'sequence' | 'grid' | 'streak' | 'precision';
+export type Modifier = 'hidden' | 'inverted' | 'chained' | 'speed' | 'mirrored' | 'blind' | 'zen' | 'chaos';
 
 export interface GameConfig {
   mechanic: Mechanic;
@@ -63,6 +63,9 @@ export const MECHANIC_NAMES: Record<Mechanic, string> = {
   react: 'React',
   arrange: 'Arrange',
   deduce: 'Deduce',
+  trace: 'Trace',
+  hunt: 'Hunt',
+  stack: 'Stack',
 };
 
 export const ELEMENT_NAMES: Record<Element, string> = {
@@ -71,6 +74,9 @@ export const ELEMENT_NAMES: Record<Element, string> = {
   shapes: 'Shapes',
   numbers: 'Numbers',
   patterns: 'Patterns',
+  emoji: 'Emoji',
+  directions: 'Directions',
+  math: 'Math',
 };
 
 export const CONSTRAINT_NAMES: Record<Constraint, string> = {
@@ -78,6 +84,8 @@ export const CONSTRAINT_NAMES: Record<Constraint, string> = {
   time: 'Time Trial',
   sequence: 'In Order',
   grid: 'Grid Based',
+  streak: 'Keep Streak',
+  precision: 'Precision',
 };
 
 export const MODIFIER_NAMES: Record<Modifier, string> = {
@@ -85,4 +93,8 @@ export const MODIFIER_NAMES: Record<Modifier, string> = {
   inverted: 'Inverted',
   chained: 'Chained',
   speed: 'Speed',
+  mirrored: 'Mirrored',
+  blind: 'Blind',
+  zen: 'Zen',
+  chaos: 'Chaos',
 };

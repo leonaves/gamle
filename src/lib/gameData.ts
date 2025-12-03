@@ -81,6 +81,73 @@ export const PATTERNS = {
   ],
 };
 
+export const EMOJI = {
+  animals: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮'],
+  food: ['🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍒', '🍑', '🥝', '🍅'],
+  objects: ['⭐', '🌙', '☀️', '⚡', '🔥', '💧', '🌸', '🍀', '🎈', '🎁', '💎', '🔔'],
+  faces: ['😀', '😎', '🥳', '😴', '🤔', '😱', '🥶', '🤯', '😇', '🤩', '😏', '🙃'],
+  sports: ['⚽', '🏀', '🏈', '⚾', '🎾', '🏐', '🎱', '🏓', '🏸', '🥊', '⛳', '🎯'],
+};
+
+export const DIRECTIONS = {
+  cardinal: [
+    { name: 'Up', symbol: '↑', key: 'ArrowUp' },
+    { name: 'Down', symbol: '↓', key: 'ArrowDown' },
+    { name: 'Left', symbol: '←', key: 'ArrowLeft' },
+    { name: 'Right', symbol: '→', key: 'ArrowRight' },
+  ],
+  diagonal: [
+    { name: 'Up-Left', symbol: '↖', key: 'q' },
+    { name: 'Up-Right', symbol: '↗', key: 'e' },
+    { name: 'Down-Left', symbol: '↙', key: 'z' },
+    { name: 'Down-Right', symbol: '↘', key: 'c' },
+  ],
+  all: [
+    { name: 'Up', symbol: '↑', key: 'ArrowUp' },
+    { name: 'Down', symbol: '↓', key: 'ArrowDown' },
+    { name: 'Left', symbol: '←', key: 'ArrowLeft' },
+    { name: 'Right', symbol: '→', key: 'ArrowRight' },
+    { name: 'Up-Left', symbol: '↖', key: 'q' },
+    { name: 'Up-Right', symbol: '↗', key: 'e' },
+    { name: 'Down-Left', symbol: '↙', key: 'z' },
+    { name: 'Down-Right', symbol: '↘', key: 'c' },
+  ],
+};
+
+export const MATH = {
+  operations: ['+', '-', '×', '÷'],
+  simple: [
+    { expression: '2 + 3', answer: 5 },
+    { expression: '7 - 4', answer: 3 },
+    { expression: '3 × 4', answer: 12 },
+    { expression: '12 ÷ 3', answer: 4 },
+    { expression: '5 + 8', answer: 13 },
+    { expression: '15 - 9', answer: 6 },
+    { expression: '6 × 7', answer: 42 },
+    { expression: '20 ÷ 5', answer: 4 },
+    { expression: '9 + 6', answer: 15 },
+    { expression: '18 - 7', answer: 11 },
+  ],
+  medium: [
+    { expression: '12 + 15', answer: 27 },
+    { expression: '34 - 19', answer: 15 },
+    { expression: '8 × 9', answer: 72 },
+    { expression: '56 ÷ 8', answer: 7 },
+    { expression: '25 + 37', answer: 62 },
+    { expression: '81 - 45', answer: 36 },
+    { expression: '11 × 11', answer: 121 },
+    { expression: '144 ÷ 12', answer: 12 },
+  ],
+  sequences: [
+    { sequence: [2, 4, 6, 8], next: 10, rule: '+2' },
+    { sequence: [1, 3, 9, 27], next: 81, rule: '×3' },
+    { sequence: [100, 90, 80, 70], next: 60, rule: '-10' },
+    { sequence: [1, 4, 9, 16], next: 25, rule: 'n²' },
+    { sequence: [2, 6, 18, 54], next: 162, rule: '×3' },
+    { sequence: [1, 1, 2, 3, 5], next: 8, rule: 'fib' },
+  ],
+};
+
 export const EMOJIS = {
   results: {
     correct: '🟩',

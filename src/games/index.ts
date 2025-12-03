@@ -4,3 +4,6 @@ export { RememberGame } from './RememberGame';
 export { ReactGame } from './ReactGame';
 export { ArrangeGame } from './ArrangeGame';
 export { DeduceGame } from './DeduceGame';
+export { TraceGame } from './TraceGame';
+export { HuntGame } from './HuntGame';
+export { StackGame } from './StackGame';

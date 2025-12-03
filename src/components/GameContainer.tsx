@@ -10,6 +10,9 @@ import {
   ReactGame,
   ArrangeGame,
   DeduceGame,
+  TraceGame,
+  HuntGame,
+  StackGame,
 } from '../games';
 
 interface Props {
@@ -81,6 +84,9 @@ export function GameContainer({ config, state, onStateChange, onComplete }: Prop
         {config.mechanic === 'react' && <ReactGame {...gameProps} />}
         {config.mechanic === 'arrange' && <ArrangeGame {...gameProps} />}
         {config.mechanic === 'deduce' && <DeduceGame {...gameProps} />}
+        {config.mechanic === 'trace' && <TraceGame {...gameProps} />}
+        {config.mechanic === 'hunt' && <HuntGame {...gameProps} />}
+        {config.mechanic === 'stack' && <StackGame {...gameProps} />}
       </div>
     </div>
   );

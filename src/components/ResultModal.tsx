@@ -15,20 +15,46 @@ export function ResultModal({ result, onClose, onPlayAgain, isInfinite }: Props)
   const stats = loadStats();
 
   const handleShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: 'Gamle',
-          text: result.shareText,
-        });
-      } else {
-        await navigator.clipboard.writeText(result.shareText);
+    const text = result.shareText;
+
+    // Try native share first (mobile)
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'Gamle', text });
+        return;
+      } catch {
+        // User cancelled or not supported, fall through to clipboard
+      }
+    }
+
+    // Try clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+        return;
+      } catch {
+        // Clipboard failed, fall through to fallback
       }
-    } catch {
-      // User cancelled or error
     }
+
+    // Fallback: create temporary textarea
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Last resort failed
+      alert('Copy this:\n\n' + text);
+    }
+    document.body.removeChild(textarea);
   };
 
   return (
