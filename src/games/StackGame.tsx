@@ -267,25 +267,28 @@ export function StackGame({ config, state, onStateChange, onComplete }: Props) {
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       {/* Target indicator */}
-      <div className="flex items-center gap-3 px-4 py-2 bg-[var(--bg-secondary)] rounded-full">
-        {gameData.targetSum !== undefined ? (
-          <>
-            <span className="text-[var(--text-muted)]">Stack to:</span>
-            <span className="text-xl font-bold">{gameData.targetSum}</span>
-            <span className="text-[var(--text-muted)]">Current:</span>
-            <span className="text-xl font-bold text-[var(--accent)]">{gameData.currentSum}</span>
-          </>
-        ) : gameData.target ? (
-          <>
-            <span className="text-[var(--text-muted)]">Catch:</span>
-            <div
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold"
-              style={gameData.target.color ? { backgroundColor: gameData.target.color } : { backgroundColor: 'var(--bg-tertiary)' }}
-            >
-              {!gameData.target.color && gameData.target.value}
-            </div>
-          </>
-        ) : null}
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex items-center gap-3 px-4 py-2 bg-[var(--bg-secondary)] rounded-full">
+          {gameData.targetSum !== undefined ? (
+            <>
+              <span className="text-[var(--text-muted)]">Stack to:</span>
+              <span className="text-xl font-bold">{gameData.targetSum}</span>
+              <span className="text-[var(--text-muted)]">Current:</span>
+              <span className="text-xl font-bold text-[var(--accent)]">{gameData.currentSum}</span>
+            </>
+          ) : gameData.target ? (
+            <>
+              <span className="text-[var(--text-muted)]">Tap to catch:</span>
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center text-xl font-bold ring-2 ring-[var(--success)]"
+                style={gameData.target.color ? { backgroundColor: gameData.target.color } : { backgroundColor: 'var(--bg-tertiary)' }}
+              >
+                {!gameData.target.color && gameData.target.value}
+              </div>
+            </>
+          ) : null}
+        </div>
+        <p className="text-xs text-[var(--text-muted)]">Tap the falling items to catch them!</p>
       </div>
 
       {/* Game area */}
@@ -295,7 +298,9 @@ export function StackGame({ config, state, onStateChange, onComplete }: Props) {
             key={item.id}
             onClick={() => handleCatch(item)}
             disabled={state.completed}
-            className="absolute w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold transition-transform hover:scale-110 active:scale-95"
+            className={`absolute w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold transition-transform hover:scale-110 active:scale-90 shadow-lg cursor-pointer ${
+              item.isTarget ? 'ring-2 ring-[var(--success)] animate-pulse' : ''
+            }`}
             style={{
               left: `${item.x}%`,
               top: `${item.y}%`,
@@ -307,8 +312,6 @@ export function StackGame({ config, state, onStateChange, onComplete }: Props) {
           </button>
         ))}
 
-        {/* Catch zone indicator */}
-        <div className="absolute bottom-0 left-0 right-0 h-2 bg-[var(--accent)] opacity-30" />
       </div>
 
       {/* Stats */}
